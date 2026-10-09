@@ -1,0 +1,85 @@
+{
+  "manifest_version": 3,
+  "name": "dwn",
+  "version": "0.1.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyJQ1mQ41qe/HUcPgqfELeLv0H2Xz0yqCZ2ozJSZ7hlz/Yb3L6cFwmfixKAMCobKvrgfoOOI4r8mHCbpDG8s7UDXsyelpjJYE741DFnNIvgINv+1+yQvuTZppuouZdWI0eky7vC7fzL3fkdmcJnYGpjasr6b6dv8KhJzSybO6go/zzQaqMObkn4o/JaqZECt9Znovg/2q7Z3bx+5kji2HsbyYwW77N00V3rFyd9wobpUcncrjkEa5cUAm5dPLvaz/hT5FowSlEHtWwKCLUV3VYAHlam/ADAKVn3WRfxxZyIDUbpq1xWPfb0fEwYBU3csBEeC0y+ddV/pfEVKH5QenDwIDAQAB",
+  "description": "Download video and audio from the current tab.",
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "minimum_chrome_version": "116",
+
+  "permissions": [
+    "nativeMessaging",
+    "cookies",
+    "storage",
+    "tabs",
+    "sidePanel"
+  ],
+
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.youtu.be/*",
+    "*://*.x.com/*",
+    "*://*.twitter.com/*",
+    "*://*.tiktok.com/*",
+    "*://*.instagram.com/*",
+    "*://*.reddit.com/*"
+  ],
+
+  "background": {
+    "service_worker": "sw.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtu.be/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.instagram.com/*",
+        "*://*.reddit.com/*"
+      ],
+      "js": ["content/floating.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["ui/sidepanel.html"],
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtu.be/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.instagram.com/*",
+        "*://*.reddit.com/*"
+      ]
+    }
+  ],
+
+  "side_panel": {
+    "default_path": "ui/sidepanel.html"
+  },
+
+  "action": {
+    "default_title": "Open dwn on this page",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  }
+}

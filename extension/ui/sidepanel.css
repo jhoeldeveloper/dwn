@@ -1,0 +1,278 @@
+:root {
+  --bg: #14141c;
+  --panel: #1c1c28;
+  --line: #2c2c3c;
+  --text: #e6e6f0;
+  --muted: #8b8ba0;
+  --accent: #6ea8fe;
+  --ok: #6fcf97;
+  --err: #ef6f6f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 10px;
+  /* No fixed width: this page is shown both in the side panel and inside the
+     floating panel's iframe, which is wider. A fixed width left dead space. */
+  width: 100%;
+  min-width: 320px;
+  font: 13px/1.45 system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  /* Two views, so the panel itself does not scroll; each view scrolls instead. */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+main { flex: 1; overflow-y: auto; min-height: 0; }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 10px;
+}
+
+.muted { color: var(--muted); font-size: 11px; }
+.status.ok { color: var(--ok); }
+.status.err { color: var(--err); }
+
+.url-row { display: flex; gap: 6px; margin-bottom: 8px; }
+
+input[type="url"], select {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 12px;
+}
+
+button {
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: .5; cursor: default; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #10101a; font-weight: 600; }
+
+.row { display: flex; gap: 6px; align-items: center; margin: 8px 0; }
+
+/* The status line only takes space when it has something to say: a fixed
+   min-height reserved a blank row above the format list. */
+.message { margin: 6px 0; font-size: 12px; }
+.message:empty { display: none; }
+.message.err { color: var(--err); }
+.message.ok { color: var(--ok); }
+
+.title { font-weight: 600; margin-bottom: 2px; }
+
+fieldset {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px;
+  margin: 8px 0;
+}
+
+legend { color: var(--muted); font-size: 11px; padding: 0 4px; }
+
+.formats { max-height: 180px; overflow-y: auto; }
+
+/* A YouTube video easily has 35+ video tracks (2160p/1440p/1080p in AV1, VP9
+   and H.264), so a short box shows a handful of rows and hides the rest
+   behind a scrollbar nobody notices. The video list gets the space; the audio
+   list stays compact because it is longer and flatter. */
+#video-formats { max-height: min(45vh, 420px); }
+
+.formats label {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  padding: 3px 0;
+  cursor: pointer;
+}
+
+.formats .meta { color: var(--muted); font-size: 11px; margin-left: auto; }
+.formats .audio { color: var(--muted); }
+
+/* Audio lists run to dozens of language variants, so each row is a single line
+   with tighter padding. The video list is short enough to breathe. */
+.formats.compact label {
+  padding: 1px 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.formats.compact .text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container-toggle { align-items: center; gap: 6px; margin-top: 8px; }
+.container-toggle select {
+  padding: 3px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 11px;
+}
+
+/* ── mode switch: video+audio versus audio only ────────────────────────── */
+.modes {
+  display: flex;
+  gap: 12px;
+  margin: 8px 0 4px;
+  font-size: 12px;
+}
+
+.modes label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+
+/* ── pinned action bar ─────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding-top: 8px;
+  margin-top: 6px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  flex: none;
+}
+
+.actions select { flex: 1; min-width: 0; }
+
+/* The title doubles as the filename, so it reads as a field, not a heading. */
+#title-input {
+  width: 100%;
+  margin: 8px 0 2px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+#video-meta { display: block; padding: 0 2px; }
+
+/* Icon-only action buttons need a squarer hit area. */
+button.icon {
+  width: 34px;
+  padding: 6px 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.toggle {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* ── tabs ─────────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab {
+  flex: 1;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 4px;
+  font-size: 12px;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+#queue-badge {
+  display: none;
+  padding: 0 5px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #10101a;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+#queue-badge.on { display: inline-block; }
+
+/* ── queue ────────────────────────────────────────────────────────────── */
+.queue h2, h2 { font-size: 12px; text-transform: uppercase; color: var(--muted); margin: 4px 0 6px; }
+
+.item {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* The text column takes the slack so the bar and the cancel button line up. */
+.item .body { flex: 1; min-width: 0; }
+
+.item .x {
+  padding: 2px 6px;
+  font-size: 13px;
+  line-height: 1;
+  flex: none;
+  color: var(--muted);
+  background: transparent;
+}
+
+.item .x:hover { color: var(--err); border-color: var(--err); }
+
+.item .name { font-size: 12px; margin-bottom: 4px; }
+.item .sub { color: var(--muted); font-size: 11px; }
+.item.failed .name { color: var(--err); }
+.item.done .name { color: var(--ok); }
+
+.bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+  margin: 4px 0;
+}
+
+.bar > i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width .2s linear;
+}

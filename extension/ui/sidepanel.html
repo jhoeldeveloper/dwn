@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>dwn</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header>
+    <strong>dwn</strong>
+    <span id="host-status" class="status">connecting…</span>
+  </header>
+
+  <nav class="tabs">
+    <button id="tab-download" class="tab active" data-view="download">Download</button>
+    <button id="tab-queue" class="tab" data-view="queue">Queue <span id="queue-badge"></span></button>
+  </nav>
+
+  <p id="message" class="message"></p>
+
+  <main>
+    <section id="view-download">
+      <div class="url-row">
+        <input id="url" type="url" placeholder="Paste a URL" spellcheck="false">
+        <button id="fetch" class="primary icon" title="Fetch formats">⇩</button>
+      </div>
+
+      <div id="video" hidden>
+        <!-- Editable title: it doubles as the output filename. -->
+        <input id="title-input" type="text" spellcheck="false" placeholder="filename">
+        <div id="video-meta" class="muted"></div>
+
+        <fieldset>
+          <legend id="video-legend">Video</legend>
+          <div id="video-formats" class="formats"></div>
+        </fieldset>
+
+        <div class="modes">
+          <label><input type="radio" name="mode" value="av" checked> Video + audio</label>
+          <label><input type="radio" name="mode" value="audio"> Audio only</label>
+        </div>
+
+        <fieldset>
+          <legend id="audio-legend">Audio track</legend>
+          <div id="audio-formats" class="formats compact"></div>
+          <label class="toggle">
+            <input type="checkbox" id="show-all-audio" hidden>
+            show every track (<span id="audio-count"></span>)
+          </label>
+        </fieldset>
+
+        <p id="format-hint" class="muted"></p>
+
+        <!-- Audio only: an Opus track ships in a .webm wrapper, which reads
+             like a video file. "Opus file" repackages it losslessly. -->
+        <label class="toggle container-toggle" id="container-row" hidden>
+          save audio as
+          <select id="container">
+            <option value="">as downloaded</option>
+            <option value="opus">.opus (Ogg Opus)</option>
+            <option value="aac">.aac (ADTS)</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section id="view-queue" hidden>
+      <h2>Queue <span id="queue-count" class="muted"></span></h2>
+      <div id="queue"></div>
+    </section>
+  </main>
+
+  <!-- Pinned so the Download button is always reachable, however long the
+       format lists get. -->
+  <footer class="actions">
+    <select id="out-dir" title="Save to">
+      <option value="">Save to…</option>
+    </select>
+    <button id="download" class="primary">Download</button>
+  </footer>
+
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>
