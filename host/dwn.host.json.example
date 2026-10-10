@@ -1,0 +1,10 @@
+{
+  "_comment": "REFERENCE ONLY — this file is never read. The browser reads the manifest that scripts/register-host.sh writes into ~/.config/<browser>/NativeMessagingHosts/dev.dwn.host.json. Copying this file there as-is will not work: the path and the id below are placeholders.",
+  "name": "dev.dwn.host",
+  "description": "dwn — native download host",
+  "path": "REPLACE_WITH_ABSOLUTE_PATH_TO_DWN_HOST",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://REPLACE_WITH_YOUR_EXTENSION_ID/"
+  ]
+}

@@ -1,9 +1,0 @@
-{
-  "name": "dev.dwn.host",
-  "description": "dwn — native download host",
-  "path": "/usr/local/bin/dwn-host",
-  "type": "stdio",
-  "allowed_origins": [
-    "chrome-extension://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/"
-  ]
-}

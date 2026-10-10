@@ -56,6 +56,6 @@ core.*
 Thumbs.db
 
 # ── Keep these even if a broad rule above would match them ────────────────
-# host/dwn.host.json is the checked-in template; the rule above targets the
-# *generated* manifests in ~/.config, which are outside the repo anyway.
-!host/dwn.host.json
+# host/dwn.host.json.example is the checked-in reference. The rule above targets
+# the *generated* manifests, which live in ~/.config and are outside the repo.
+!host/dwn.host.json.example

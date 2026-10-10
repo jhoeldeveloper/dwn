@@ -72,5 +72,8 @@ endif()
 # ── Install ──────────────────────────────────────────────────────────────
 include(GNUInstallDirs)
 install(TARGETS dwn-host RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dwn.host.json
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/dwn)
+# dwn.host.json.example is deliberately NOT installed: it is a reference for
+# humans, with placeholder paths. The manifest a browser actually reads is
+# generated per machine by scripts/register-host.sh, into the browser's own
+# NativeMessagingHosts directory. Installing a template there would create a
+# file that looks authoritative and cannot work.

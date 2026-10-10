@@ -29,7 +29,7 @@ dwn/
 │   └── brave.md             Brave specifics: Shields, cookie permissions
 ├── host/                    ── C++17 native messaging host
 │   ├── CMakeLists.txt
-│   ├── dwn.host.json        ✓ native messaging manifest template
+│   ├── dwn.host.json.example  reference only; the real manifest is generated
 │   ├── include/dwn/
 │   │   ├── protocol.hpp     ✓ framing: read_message / write_message / shell_quote
 │   │   ├── process.hpp      ✓ spawn a command, stream stdout lines
