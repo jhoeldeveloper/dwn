@@ -26,6 +26,10 @@ stream and the browser tears the host down.
 | `fetch` | `url`, `cookies`? | `formats` |
 | `download` | `url`, `format_id`, `out_dir`, `cookies`?, `container`?, `player_clients`? | `item`, then events |
 | `queue` | — | `state` |
+
+`state` carries `items` in **insertion order** (oldest first); each item has
+`created_at` (Unix milliseconds), which the extension uses to list the queue
+newest-first.
 | `cancel` | `download_id` | `ok` |
 | `shutdown` | — | `ok`, then exit |
 
@@ -43,7 +47,8 @@ Every response echoes the request `id`. Progress events are unsolicited (no `id`
                  "audio_only": false, "filesize": 84211000, "acodec": "none" } ] }
 
 { "id": "8", "type": "item", "download_id": "3", "url": "...",
-  "title": "...", "format_id": "137", "out_dir": "/home/me/Videos" }
+  "title": "...", "format_id": "137", "out_dir": "/home/me/Videos",
+  "created_at": 1732000000000 }
 
 { "download_id": "3", "type": "progress",
   "pct": 42.5, "speed": "2.50MiB/s", "eta": "00:30" }

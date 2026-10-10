@@ -2,6 +2,8 @@
 // yt-dlp runs, because the format varies by version and codec.
 #include "dwn/downloader.hpp"
 
+#include <nlohmann/json.hpp>
+
 #include <cstdio>
 #include <string>
 
@@ -174,6 +176,50 @@ int main() {
         merge.out_dir = "/tmp";
         const std::string id = queue->add(merge);
         check(!id.empty(), "a merged format id like 137+140 is accepted");
+    }
+
+    std::printf("downloader: queue ordering metadata\n");
+    {
+        // The host emits the queue oldest-first; the panel sorts newest-first
+        // using created_at. Two items added back to back must therefore carry
+        // non-decreasing timestamps in insertion order.
+        //
+        // Deliberately leaked: add() spawns a detached worker that references
+        // the queue (see the merged-format test above).
+        static auto* queue = new dwn::DownloadQueue();
+        queue->max_concurrent = 1;   // the second job stays queued
+        std::string first_id;
+        std::string second_id;
+        for (int i = 0; i < 2; ++i) {
+            dwn::DownloadRequest req;
+            req.url = "https://example.test";
+            req.format_id = "137";
+            req.out_dir = "/tmp";
+            const std::string id = queue->add(req);
+            if (i == 0) first_id = id; else second_id = id;
+        }
+
+        const auto state = nlohmann::json::parse(queue->state_json());
+        check(state["items"].is_array() && state["items"].size() >= 2,
+              "state_json lists the queued items");
+
+        long long previous = -1;
+        bool stamped = true;
+        bool ascending = true;
+        std::string expected_order[] = {first_id, second_id};
+        int position = 0;
+        for (const auto& item : state["items"]) {
+            const long long created = item.value("created_at", 0LL);
+            if (created <= 0) stamped = false;
+            if (created < previous) ascending = false;
+            previous = created;
+            if (position < 2 && item.value("download_id", "") == expected_order[position]) {
+                ++position;
+            }
+        }
+        check(stamped, "every item carries a non-zero created_at");
+        check(ascending, "created_at never goes backwards in host order");
+        check(position == 2, "items keep insertion order (the UI sorts them)");
     }
 
     if (g_failures > 0) {

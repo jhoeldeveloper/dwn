@@ -190,6 +190,7 @@ std::string DownloadQueue::item_json(const DownloadItem& item) const {
         {"out_dir", item.out_dir},
         {"status", status},
         {"pct", item.pct},
+        {"created_at", item.created_at},
         {"speed", item.speed},
         {"eta", item.eta},
         {"error", item.error},
@@ -221,6 +222,8 @@ std::string DownloadQueue::add(const DownloadRequest& req_in) {
     item.filename  = req.filename;
     item.player_clients = req.player_clients;
     item.container   = req.container;
+    item.created_at  = std::chrono::duration_cast<std::chrono::milliseconds>(
+                           std::chrono::system_clock::now().time_since_epoch()).count();
 
     const std::string id = item.id;
     {

@@ -25,6 +25,9 @@ struct DownloadItem {
     std::string filename;   // user-edited title, becomes the filename
     std::string player_clients;  // yt-dlp extractor args the fetch needed, if any
     std::string container;       // "" = as downloaded, "opus" = remux to Ogg Opus
+    // Milliseconds since the Unix epoch, stamped when the job is added. The
+    // queue keeps insertion order; the UI sorts on this to show newest first.
+    long long created_at = 0;
     Status   status = Status::Queued;
     double   pct = 0.0;
     std::string speed;

@@ -465,7 +465,16 @@ function renderQueue() {
   box.textContent = '';
   let active = 0;
 
-  for (const item of state.items.values()) {
+  // The host sends the queue oldest-first; the panel reads better newest-first,
+  // so a download you just queued is the one your eye lands on. Ties fall back
+  // to arrival order, which keeps the list from shuffling between polls.
+  const items = [...state.items.values()]
+    .map((item, i) => ({ item, i }))
+    .sort((a, b) =>
+      (b.item.created_at || 0) - (a.item.created_at || 0) || a.i - b.i)
+    .map((e) => e.item);
+
+  for (const item of items) {
     if (item.status === 'running' || item.status === 'queued') active++;
     const el = document.createElement('div');
     el.className = `item ${item.status}`;
